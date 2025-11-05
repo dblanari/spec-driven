@@ -2,10 +2,9 @@
 set -euo pipefail
 
 # ------------------------------------------------------------------------------
-# ADR Draft Review Prompt Preparer (no git usage)
-# - Prints a single paste-ready prompt with inline ADR template, data ADRs, and example ADRs
-# - Does NOT inspect git state; purely reads documentation files.
-# - Portable (no bash globstar dependency; uses find)
+# ADR Draft Review Prompt Creation and Validation (no git usage)
+# - Builds a paste-ready prompt aggregating: Business Context, Data ADR drafts, template, examples.
+# - Emphasis: validating draft ADRs against template & business context alignment.
 #
 # Usage:
 #   tools/duo/prepare_adr.sh [--max-doc-chars N]
@@ -14,9 +13,9 @@ set -euo pipefail
 #   --max-doc-chars 200000   Trim each doc to first N chars (0 = unlimited)
 #
 # Source directories (adjust if your layout differs):
-TEMPLATE_DIR='docs/md/ADR/template'
-DATA_DIR='docs/md/ADR/data'
-EXAMPLES_DIR='docs/md/ADR/examples'
+DATA_DIR='docs/md/ADRs/data'
+EXAMPLES_DIR='docs/md/ADRs/examples'
+BUSINESS_CONTEXT_DIR='docs/md/ADRs/business_context'
 # ------------------------------------------------------------------------------
 
 MAX_DOC_CHARS=200000
@@ -105,35 +104,42 @@ cat >> "$TMP_PROMPT_FILE" <<'EOF'
 -------------------------------- CUT BELOW (paste into ADR Review) --------------------------------
 You are a senior architecture reviewer. Use the inline ADR materials below:
 
+PRIMARY FOCUS
+- Validate ADR drafts (DATA ADR) for completeness, clarity, and alignment with business context.
+
 TASKS
-1) Consistency & Clarity
-   - Verify each ADR conforms to template sections (Context, Decision, Alternatives, Consequences, etc.).
-   - Flag missing or vague rationale.
-2) Decision Cohesion
-   - Identify conflicts or redundancy across ADRs; note if newer ADRs should supersede older ones.
-3) Risk & Impact
-   - Highlight operational, security, scalability, and migration risks implied by decisions.
-4) Validation & Metrics
-   - Ensure each ADR specifies measurable validation criteria / KPIs.
-5) Improvement Suggestions
-   - Provide actionable edits (section + concise recommendation).
-6) Follow-up Items
-   - Derive concrete next steps for open questions.
+1) Draft Completeness & Template Adherence
+   - Check required sections (Context, Decision, Rationale, Alternatives, Consequences, Validation).
+2) Context Alignment
+   - Ensure decisions are consistent with business domain, payment flows, constraints, KPIs found in Business Context.
+3) Validation Criteria
+   - Confirm each ADR defines measurable KPIs / acceptance tests enabling post-decision evaluation.
+4) Risk & Impact
+   - Identify operational, security, scalability, compliance, migration risks; propose mitigations.
+5) Cross-ADR Consistency
+   - Flag conflicting or duplicate decisions; note if any ADR supersedes another.
+6) Improvement Suggestions
+   - Provide concise actionable edits (section + recommendation).
+7) Follow-up & Validation Plan
+   - List concrete next steps, open questions, required experiments or metrics instrumentation.
 
 OUTPUT FORMAT
 - Template adherence summary
+- Context alignment issues
 - Cross-ADR conflicts / overlaps
 - Risks & mitigations
-- Metrics & validation gaps
+- Validation gaps (missing KPIs/tests)
 - Improvement suggestions
 - Follow-up action list
 - Verdict: Ready / Needs Revisions (with rationale)
 EOF
 
 echo >> "$TMP_PROMPT_FILE"
-append_group_section "ADR TEMPLATE"   "$TEMPLATE_DIR"   "$TMP_PROMPT_FILE"
-append_group_section "DATA ADRs"       "$DATA_DIR"       "$TMP_PROMPT_FILE"
-append_group_section "EXAMPLE ADRs"    "$EXAMPLES_DIR"   "$TMP_PROMPT_FILE"
+
+# Insert Business Context section before ADR for alignment.
+append_group_section "BUSINESS CONTEXT" "$BUSINESS_CONTEXT_DIR" "$TMP_PROMPT_FILE"
+append_group_section "DATA ADR"         "$DATA_DIR"       "$TMP_PROMPT_FILE"
+append_group_section "EXAMPLE ADRs      "$EXAMPLES_DIR"   "$TMP_PROMPT_FILE"
 
 {
   echo "[meta]: generation_timestamp=$STAMP max_doc_chars=$MAX_DOC_CHARS"
