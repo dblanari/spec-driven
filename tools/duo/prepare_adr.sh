@@ -4,7 +4,7 @@ set -euo pipefail
 # ------------------------------------------------------------------------------
 # ADR Draft Review Prompt Creation and Validation (no git usage)
 # - Builds a paste-ready prompt aggregating: Business Context, Data ADR drafts, template, examples.
-# - Emphasis: validating draft ADRs against template & business context alignment.
+# - Emphasis: validating draft ADR against template & business context alignment.
 #
 # Usage:
 #   tools/duo/prepare_adr.sh [--max-doc-chars N]
@@ -13,9 +13,10 @@ set -euo pipefail
 #   --max-doc-chars 200000   Trim each doc to first N chars (0 = unlimited)
 #
 # Source directories (adjust if your layout differs):
-DATA_DIR='docs/md/ADRs/data'
+DATA_DIR='docs/md/ADRs/ADR3/data'
 EXAMPLES_DIR='docs/md/ADRs/examples'
 BUSINESS_CONTEXT_DIR='docs/md/ADRs/business_context'
+TEMPLATE_DIR='docs/md/ADRs/template'
 # ------------------------------------------------------------------------------
 
 MAX_DOC_CHARS=200000
@@ -102,14 +103,20 @@ TMP_PROMPT_FILE=$(mktemp)
 
 cat >> "$TMP_PROMPT_FILE" <<'EOF'
 -------------------------------- CUT BELOW (paste into ADR Review) --------------------------------
-You are a senior architecture reviewer. Use the inline ADR materials below:
+You are a senior architecture. Use the inline ADR materials below.
+
+SECTIONS PROVIDED (order):
+- BUSINESS CONTEXT
+- ADR TEMPLATE (authoritative required structure & section purposes)
+- DATA ADR (drafts to validate)
+- EXAMPLE ADR (reference patterns)
 
 PRIMARY FOCUS
-- Validate ADR drafts (DATA ADR) for completeness, clarity, and alignment with business context.
+- Create ADR drafts (DATA ADR) for completeness, validate, and alignment with business context.
 
 TASKS
 1) Draft Completeness & Template Adherence
-   - Check required sections (Context, Decision, Rationale, Alternatives, Consequences, Validation).
+   - Enforce required sections exactly as defined in ADR TEMPLATE section below (names, order, intent).
 2) Context Alignment
    - Ensure decisions are consistent with business domain, payment flows, constraints, KPIs found in Business Context.
 3) Validation Criteria
@@ -138,8 +145,9 @@ echo >> "$TMP_PROMPT_FILE"
 
 # Insert Business Context section before ADR for alignment.
 append_group_section "BUSINESS CONTEXT" "$BUSINESS_CONTEXT_DIR" "$TMP_PROMPT_FILE"
-append_group_section "DATA ADR"         "$DATA_DIR"       "$TMP_PROMPT_FILE"
-append_group_section "EXAMPLE ADRs      "$EXAMPLES_DIR"   "$TMP_PROMPT_FILE"
+append_group_section "ADR TEMPLATE"     "$TEMPLATE_DIR"          "$TMP_PROMPT_FILE"
+append_group_section "DATA ADR"         "$DATA_DIR"              "$TMP_PROMPT_FILE"
+append_group_section "EXAMPLE ADR"      "$EXAMPLES_DIR"          "$TMP_PROMPT_FILE"
 
 {
   echo "[meta]: generation_timestamp=$STAMP max_doc_chars=$MAX_DOC_CHARS"
