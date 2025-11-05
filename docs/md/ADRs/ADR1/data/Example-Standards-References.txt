@@ -1,0 +1,10 @@
+Standards References
+	•	Regulatory / Compliance
+	•	PCI DSS v4.0: Requirement for secure logging and auditing of financial transactions.
+	•	GDPR Article 30: Obligation to keep detailed records of processing activities.
+	•	Industry Best Practices
+	•	CNCF Cloud-Native Landscape: Event-driven architectures recommended for decoupling.
+	•	IEEE 1471: Recommended practice for architecture description of software-intensive systems.
+	•	Internal Standards
+	•	Endava Architecture Playbook (v3.1): Encourages event-driven design where decoupling is a business need.
+	•	Security Guidelines (2025 update): Requires TLS and encryption at rest for messaging systems.

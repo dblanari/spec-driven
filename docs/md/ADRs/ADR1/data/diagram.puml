@@ -1,0 +1,17 @@
+@startuml
+actor Customer
+participant PaymentService
+participant Kafka as "Event Bus (Kafka)"
+participant NotificationService
+participant FraudService
+participant ReportingService
+
+Customer -> PaymentService: Initiates Payment
+PaymentService -> Kafka: Publish PaymentNotification Event
+
+Kafka -> NotificationService: Consume PaymentNotification
+Kafka -> FraudService: Consume PaymentNotification
+Kafka -> ReportingService: Consume PaymentNotification
+
+NotificationService -> Customer: Send Email/SMS
+@enduml
