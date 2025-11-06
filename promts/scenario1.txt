@@ -1,0 +1,159 @@
+You are a senior architecture. Use the inline ADR materials below.
+
+SECTIONS PROVIDED:
+- BUSINESS CONTEXT
+- ADR TEMPLATE (authoritative required structure & section purposes)
+- DATA ADR (drafts to validate)
+- EXAMPLE ADR (reference patterns)
+
+
+===== BUSINESS CONTEXT =====
+--- file: docs/md/ADRs/business_context/README.md
+# Business Context
+
+Purpose:
+Provide domain background so ADR decisions align with real constraints and goals.
+
+## Solution Context: AI-Powered ADR Generation and Validation Assistant
+Goal: Automate high-quality, template-compliant ADRs via CustomGPT with faster turnaround, explicit assumptions, and full traceability.
+
+Drivers:
+- Manual ADRs slow / inconsistent.
+- Missing assumptions & validation.
+- Stale docs hurt onboarding & governance.
+- Hard to enforce uniform quality.
+- Limited budget for implementation.
+
+Stakeholders: Architecture (govern), Engineering squads (produce/use), Compliance/Risk (audit), Product (visibility), ML/Platform (model ops).
+
+Operational Modes:
+1. Input Analysis – Parse artifacts (prompts, diffs, tickets) → extract context, constraints, quality attributes, risks.
+2. ADR Drafting – Generate structured ADR (Title, Status, Context, Decision, Consequences, Assumptions) + inferred assumptions.
+3. Validation – Compare to exemplars → score completeness, template conformity, terminology consistency → produce Validation Summary.
+
+Lifecycle: Input Package → Parsed Context → Draft ADR → Validated ADR → Published ADR → Archived (superseded). Assumptions catalog accumulates reusable assumptions.
+
+Non-functional Priorities:
+- Accuracy (constraint extraction).
+- Latency <10s typical set.
+- Availability ≥99.5%.
+- Traceability (artifact hashes).
+- Data isolation (sandboxed model).
+- Observability (gen + validation metrics).
+
+Compliance:
+- Secure handling of proprietary artifacts.
+- Audit log (input, output, scores).
+- Explainability (source snippet links).
+
+Risks & Mitigations:
+- Prompt injection / artifact poisoning → sanitization + controlled retrieval.
+- Hallucinated assumptions → source citation + reviewer flag.
+- Template drift → version tagging + regression tests.
+
+KPIs:
+- Generation time reduction.
+- Template compliance ≥95%.
+- Validation precision.
+- Assumptions detected / ADR.
+- Adoption ratio.
+- Freshness (% ADRs updated within SLA).
+- Lightweight satisfaction score.
+
+Integration Boundaries:
+- VCS (diffs, PR metadata)
+- Ticketing (Jira/Linear)
+- ADR repository (exemplars)
+- Policy/Secrets store
+- Notification (Slack)
+
+Pain Points (condensed):
+- Siloed tacit knowledge.
+- Undocumented reasoning → rework.
+- Format inconsistency.
+- Low discoverability.
+
+Guidelines:
+- Keep business focus; exclude low-level implementation.
+- Update modes if workflow changes.
+- Review KPIs quarterly; retire unused.
+
+===== ADR TEMPLATE =====
+--- file: docs/md/ADRs/template/ADR-YYYYMMDD-template.md
+# ADR <Short Title>
+
+## Status
+<!-- List of statuses: proposed, accepted, rejected, superseded, deprecated -->
+Proposed
+
+## Context
+<!-- Why a decision is needed now. Business drivers, constraints, assumptions. -->
+**Business problem**: <what outcome we need, who benefits>
+**Constraints**: <time, budget, regulatory, tech>
+**Assumptions**: <things believed true>
+**Out of scope**: <explicitly excluded items>
+
+## Decision
+<!-- The selected option and why it wins. -->
+**Chosen option**: <Option X>
+**Primary rationale**: <top 3 reasons (business + technical)>
+
+## Consequences
+**Positive**
+- <benefit 1>
+- <benefit 2>
+
+**Negative / Trade-offs**
+- <trade-off 1>
+- <new obligations, debt, vendor lock-in, complexity>
+
+===== DATA ADR =====
+--- file: docs/md/ADRs/ADR1/data/Solution1.md
+Solution1: Use CustomGPT and MCP server(GitHub) as repository to store and manage ADRs.
+Create a system that leverages CustomGPT for drafting and validating Architecture Decision Records (ADRs) while using an MCP server (GitHub) as the repository for storing and managing ADRs.
+The system will consist of the following components:
+CustomGPT Integration: Utilize CustomGPT to draft ADRs based on user-provided context, constraints, and options, ensuring adherence to the official ADR template.
+MCP Server (GitHub):
+Use Default CustomGPT interface to connect to a GitHub repository that serves as the MCP server for storing ADRs.
+
+--- file: docs/md/ADRs/ADR1/data/Solution2.md
+Solution1: Use RAG and LLM API integration.
+Create a Retrieval-Augmented Generation (RAG) system that leverages a Large Language Model (LLM) API to draft and validate Architecture Decision Records (ADRs).
+The system will consist of the following components:
+Vector Database: Store embeddings of existing ADRs, templates, and relevant documentation for efficient retrieval.
+Embedding Model: Use a pre-trained embedding model to convert text data into vector representations.
+RAG Pipeline: Implement a RAG pipeline that retrieves relevant documents from the vector database based on user input and uses the LLM API to generate ADR drafts.
+User Interface: Develop a user-friendly interface for users to input context, constraints, and options, and receive drafted ADRs.
+Validation Module: Create a module that compares drafted ADRs against example ADRs for format, tone, and completeness, producing a validation summary.
+By integrating RAG with an LLM API, the system can generate precise and evidence-backed ADRs while ensuring adherence to the official ADR template.
+
+--- file: docs/md/ADRs/ADR1/data/Solution3.md
+Solution3 (preferred): ssh command to prepare context for CustomGPT.
+//   - "MODE: DRAFTING" when drafting ADRs.
+//   - "MODE: VALIDATION" when validating ADRs.
+Example command: prepare_adr.sh
+
+Generated data start
+You are a senior architecture. Use the inline ADR materials below.
+
+SECTIONS PROVIDED (order):
+- BUSINESS CONTEXT
+- ADR TEMPLATE (authoritative required structure & section purposes)
+- DATA ADR (drafts to validate)
+- EXAMPLE ADR (reference patterns)
+
+
+===== BUSINESS CONTEXT =====
+
+===== ADR TEMPLATE =====
+
+===== DATA ADR =====
+
+===== EXAMPLE ADR =====
+
+Generated data start
+
+Copy result into custom GPT for ADR generation and validation.
+
+===== EXAMPLE ADR =====
+(no markdown files in: docs/md/ADRs/ADR1/examples)

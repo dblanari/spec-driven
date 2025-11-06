@@ -13,8 +13,8 @@ set -euo pipefail
 #   --max-doc-chars 200000   Trim each doc to first N chars (0 = unlimited)
 #
 # Source directories (adjust if your layout differs):
-DATA_DIR='docs/md/ADRs/ADR3/data'
-EXAMPLES_DIR='docs/md/ADRs/examples'
+DATA_DIR='docs/md/ADRs/ADR1/data'
+EXAMPLES_DIR='docs/md/ADRs/ADR1/examples'
 BUSINESS_CONTEXT_DIR='docs/md/ADRs/business_context'
 TEMPLATE_DIR='docs/md/ADRs/template'
 # ------------------------------------------------------------------------------
@@ -102,45 +102,15 @@ TMP_PROMPT_FILE=$(mktemp)
 : > "$TMP_PROMPT_FILE"
 
 cat >> "$TMP_PROMPT_FILE" <<'EOF'
--------------------------------- CUT BELOW (paste into ADR Review) --------------------------------
 You are a senior architecture. Use the inline ADR materials below.
 
-SECTIONS PROVIDED (order):
+SECTIONS PROVIDED:
 - BUSINESS CONTEXT
 - ADR TEMPLATE (authoritative required structure & section purposes)
 - DATA ADR (drafts to validate)
 - EXAMPLE ADR (reference patterns)
 
-PRIMARY FOCUS
-- Create ADR drafts (DATA ADR) for completeness, validate, and alignment with business context.
-
-TASKS
-1) Draft Completeness & Template Adherence
-   - Enforce required sections exactly as defined in ADR TEMPLATE section below (names, order, intent).
-2) Context Alignment
-   - Ensure decisions are consistent with business domain, payment flows, constraints, KPIs found in Business Context.
-3) Validation Criteria
-   - Confirm each ADR defines measurable KPIs / acceptance tests enabling post-decision evaluation.
-4) Risk & Impact
-   - Identify operational, security, scalability, compliance, migration risks; propose mitigations.
-5) Cross-ADR Consistency
-   - Flag conflicting or duplicate decisions; note if any ADR supersedes another.
-6) Improvement Suggestions
-   - Provide concise actionable edits (section + recommendation).
-7) Follow-up & Validation Plan
-   - List concrete next steps, open questions, required experiments or metrics instrumentation.
-
-OUTPUT FORMAT
-- Template adherence summary
-- Context alignment issues
-- Cross-ADR conflicts / overlaps
-- Risks & mitigations
-- Validation gaps (missing KPIs/tests)
-- Improvement suggestions
-- Follow-up action list
-- Verdict: Ready / Needs Revisions (with rationale)
 EOF
-
 echo >> "$TMP_PROMPT_FILE"
 
 # Insert Business Context section before ADR for alignment.
@@ -148,12 +118,5 @@ append_group_section "BUSINESS CONTEXT" "$BUSINESS_CONTEXT_DIR" "$TMP_PROMPT_FIL
 append_group_section "ADR TEMPLATE"     "$TEMPLATE_DIR"          "$TMP_PROMPT_FILE"
 append_group_section "DATA ADR"         "$DATA_DIR"              "$TMP_PROMPT_FILE"
 append_group_section "EXAMPLE ADR"      "$EXAMPLES_DIR"          "$TMP_PROMPT_FILE"
-
-{
-  echo "[meta]: generation_timestamp=$STAMP max_doc_chars=$MAX_DOC_CHARS"
-} | append_text_block "META" "$TMP_PROMPT_FILE"
-
-echo "-------------------------------- CUT ABOVE ---------------------------------------------------------------" >> "$TMP_PROMPT_FILE"
-
 cat "$TMP_PROMPT_FILE"
 rm -f "$TMP_PROMPT_FILE"

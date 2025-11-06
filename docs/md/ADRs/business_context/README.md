@@ -11,6 +11,7 @@ Drivers:
 - Missing assumptions & validation.
 - Stale docs hurt onboarding & governance.
 - Hard to enforce uniform quality.
+- Limited budget for implementation.
 
 Stakeholders: Architecture (govern), Engineering squads (produce/use), Compliance/Risk (audit), Product (visibility), ML/Platform (model ops).
 
