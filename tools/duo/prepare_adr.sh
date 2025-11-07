@@ -102,13 +102,12 @@ TMP_PROMPT_FILE=$(mktemp)
 : > "$TMP_PROMPT_FILE"
 
 cat >> "$TMP_PROMPT_FILE" <<'EOF'
-You are a senior architecture. Use the inline ADR materials below.
+You are a senior architect. Use the inline ADR materials below.
 
-SECTIONS PROVIDED:
-- BUSINESS CONTEXT
-- ADR TEMPLATE (authoritative required structure & section purposes)
-- DATA ADR (drafts to validate)
-- EXAMPLE ADR (reference patterns)
+TASKS
+1. Run [Mode: Analysis]
+2. Run [Mode: Generation]
+3. Run [Mode: Validation]
 
 EOF
 echo >> "$TMP_PROMPT_FILE"

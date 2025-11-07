@@ -16,6 +16,10 @@ Proposed
 **Chosen option**: <Option X>  
 **Primary rationale**: <top 3 reasons (business + technical)>
 
+**Alternative options**
+- <options 1>
+- <options 2>
+
 ## Consequences
 **Positive**
 - <benefit 1>
@@ -24,3 +28,7 @@ Proposed
 **Negative / Trade-offs**
 - <trade-off 1>
 - <new obligations, debt, vendor lock-in, complexity>
+
+## References
+- <link 1>
+- <link 2>
