@@ -1,0 +1,76 @@
+You are a senior architect. Use the inline ADR materials below.
+
+TASKS
+1. Run [Mode: Analysis]
+2. Run [Mode: Generation]
+3. Run [Mode: Validation]
+
+
+===== BUSINESS CONTEXT =====
+--- file: docs/md/ADRs/ADR0/context/business.md
+Redis memory cache cluster
+
+# Context
+
+The banking application is experiencing high latency in handling frequent read operations, such as product catalog inquiries, campaigns reads, dictionary data reads.
+The data is stored in a relational database (Oracle).
+
+The issues of current architecture:
+- Increased database load.
+- Slower response times under high traffic.
+- Difficulty to scale for a good user experience.
+
+Note: Redis is used by other microservices of the bank's applications.
+
+===== ADR TEMPLATE =====
+--- file: docs/md/ADRs/template/ADR-YYYYMMDD-template.md
+# ADR <Short Title>
+
+## Status
+<!-- List of statuses: proposed, accepted, rejected, superseded, deprecated -->
+Proposed
+
+## Context
+<!-- Why a decision is needed now. Business drivers, constraints, assumptions. -->
+**Business problem**: <what outcome we need, who benefits>
+**Constraints**: <time, budget, regulatory, tech>
+**Assumptions**: <things believed true>
+**Out of scope**: <explicitly excluded items>
+
+## Decision
+<!-- The selected option and why it wins. -->
+**Chosen option**: <Option X>
+**Primary rationale**: <top 3 reasons (business + technical)>
+
+**Alternative options**
+- <options 1>
+- <options 2>
+
+## Consequences
+**Positive**
+- <benefit 1>
+- <benefit 2>
+
+**Negative / Trade-offs**
+- <trade-off 1>
+- <new obligations, debt, vendor lock-in, complexity>
+
+## References
+- <link 1>
+- <link 2>
+
+===== DATA ADR =====
+--- file: docs/md/ADRs/ADR0/data/decision.md
+# Decision
+Implement a Redis memory cache cluster as a distributed caching solution for frequently accessed data in the banking application.
+
+Redis will be deployed as a high-availability cluster with:
+- Primary-Replica setup for fault tolerance
+- Cluster mode enabled for horizontal scalability
+
+Cache invalidation will be managed through:
+- Time-to-Live (TTL) policies for short-lived data.
+- Event-based data eviction - maybe in the future.
+
+===== EXAMPLE ADR =====
+(no markdown files in: docs/md/ADRs/ADR0/examples)

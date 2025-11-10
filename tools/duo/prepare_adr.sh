@@ -13,9 +13,9 @@ set -euo pipefail
 #   --max-doc-chars 200000   Trim each doc to first N chars (0 = unlimited)
 #
 # Source directories (adjust if your layout differs):
-DATA_DIR='docs/md/ADRs/ADR1/data'
-EXAMPLES_DIR='docs/md/ADRs/ADR1/examples'
-BUSINESS_CONTEXT_DIR='docs/md/ADRs/business_context'
+DATA_DIR='docs/md/ADRs/ADR0/data'
+EXAMPLES_DIR='docs/md/ADRs/ADR0/examples'
+BUSINESS_CONTEXT_DIR='docs/md/ADRs/ADR0/context'
 TEMPLATE_DIR='docs/md/ADRs/template'
 # ------------------------------------------------------------------------------
 
